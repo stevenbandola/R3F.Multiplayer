@@ -3,7 +3,7 @@ import express from 'express'
 import Router from 'express-promise-router'
 import { Server } from 'socket.io'
 import https from 'https'
-import { withCors } from 'cors-anywhere'
+import { createServer } from 'cors-anywhere'
 
 // var key = fs.readFileSync('./selfsigned.key')
 // var cert = fs.readFileSync('./selfsigned.crt')
@@ -43,7 +43,8 @@ app.use(function (req, res, next) {
 
 app.use(router)
 
-const server = https.createServer({}, app)
+// const server = https.createServer({}, app)
+const server = createServer({ https: true }, app)
 
 server.listen(4444, () => {
     console.log(`Listening on port https://localhost:4444...`)
