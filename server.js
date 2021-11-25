@@ -4,12 +4,12 @@ import Router from 'express-promise-router'
 import { Server } from 'socket.io'
 import https from 'https'
 
-var key = fs.readFileSync('./selfsigned.key')
-var cert = fs.readFileSync('./selfsigned.crt')
-var options = {
-    key: key,
-    cert: cert,
-}
+// var key = fs.readFileSync('./selfsigned.key')
+// var cert = fs.readFileSync('./selfsigned.crt')
+// var options = {
+//     key: key,
+//     cert: cert,
+// }
 
 // Create router
 const router = Router()
@@ -31,7 +31,7 @@ const app = express()
 
 app.use(router)
 
-const server = https.createServer(options, app)
+const server = https.createServer(app)
 
 server.listen(4444, () => {
     console.log(`Listening on port https://localhost:4444...`)
