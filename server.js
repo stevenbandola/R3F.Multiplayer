@@ -31,7 +31,7 @@ const app = express()
 
 app.use(router)
 
-const server = https.createServer(app)
+const server = https.createServer({}, app)
 
 server.listen(4444, () => {
     console.log(`Listening on port https://localhost:4444...`)
@@ -39,7 +39,7 @@ server.listen(4444, () => {
 
 const ioServer = new Server(server, {
     cors: {
-        origin: '*',
+        origin: '*:*',
     },
 })
 
