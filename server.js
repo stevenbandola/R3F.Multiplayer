@@ -45,8 +45,8 @@ app.use(router)
 
 const server = https.createServer({}, app)
 // const server = createServer({ https: true }, app)
-
-server.listen(process.env.PORT | 8080, () => {
+const port = process.env.PORT || 8080
+server.listen(port, () => {
     console.log(`Listening on port https://localhost:4444...`)
 })
 
