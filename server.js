@@ -43,7 +43,7 @@ app.use(function (req, res, next) {
 
 app.use(router)
 
-const server = https.createServer({}, app)
+const server = https.createServer(app)
 // const server = createServer({ https: true }, app)
 const port = process.env.PORT || 8080
 server.listen(port, () => {
