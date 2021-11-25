@@ -24,6 +24,9 @@ let _socketOptions = {
     pingInterval: 10 * 1000,
     pingTimeout: 5000,
     transports: ['websocket'],
+    cors: {
+        origin: '*',
+    },
 }
 _httpPort = Number(process.env.PORT || '8080')
 _http = Https.createServer(EventEmitter._httpHandler)
