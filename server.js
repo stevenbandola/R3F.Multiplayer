@@ -52,7 +52,7 @@ server.listen(4444, () => {
 
 const ioServer = new Server(server, {
     cors: {
-        origin: '*:*',
+        origin: '*',
     },
 })
 
