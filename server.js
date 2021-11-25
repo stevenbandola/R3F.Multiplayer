@@ -2,6 +2,14 @@ import fs from 'fs'
 import express from 'express'
 import Router from 'express-promise-router'
 import { Server } from 'socket.io'
+import https from 'https'
+
+var key = fs.readFileSync('./selfsigned.key')
+var cert = fs.readFileSync('./selfsigned.crt')
+var options = {
+    key: key,
+    cert: cert,
+}
 
 // Create router
 const router = Router()
@@ -14,18 +22,26 @@ router.get('/', async (req, res, next) => {
 
 // Everything else that's not index 404s
 router.use('*', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     res.status(404).send({ message: 'Not Found' })
 })
 
 // Create express app and listen on port 4444
 const app = express()
-app.use(express.static('dist'))
+
 app.use(router)
-const server = app.listen(process.env.PORT || 4444, () => {
-    console.log(`Listening on port http://localhost:4444...`)
+
+const server = https.createServer(options, app)
+
+server.listen(4444, () => {
+    console.log(`Listening on port https://localhost:4444...`)
 })
 
-const ioServer = new Server(server)
+const ioServer = new Server(server, {
+    cors: {
+        origin: '*',
+    },
+})
 
 let clients = {}
 
