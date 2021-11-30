@@ -34,7 +34,7 @@ app.use(express.static('build'))
 app.use(router)
 
 const port = process.env.PORT || 4444
-const server = Https.createServer(app, options)
+const server = Https.createServer(app)
 const io = geckos({ iceServers, port })
 
 io.addServer(server)
