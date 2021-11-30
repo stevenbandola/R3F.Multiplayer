@@ -1,25 +1,33 @@
-import fs from 'fs'
+// import fs from 'fs'
 import express from 'express'
 import Router from 'express-promise-router'
 
 import * as Https from 'https'
 import geckos, { iceServers } from '@geckos.io/server'
-import Debug from 'debug'
-const debug = Debug('app:SocketServer')
-var key = fs.readFileSync('./selfsigned.key')
-var cert = fs.readFileSync('./selfsigned.crt')
-var options = {
-    key: key,
-    cert: cert,
-}
+// import Debug from 'debug'
+// const debug = Debug('app:SocketServer')
+// var key = fs.readFileSync('./selfsigned.key')
+// var cert = fs.readFileSync('./selfsigned.crt')
+// var options = {
+//     key: key,
+//     cert: cert,
+// }
 
 // Create router
 const router = Router()
 
 // Main route serves the index HTML
 router.get('/', async (req, res, next) => {
-    let html = fs.readFileSync('index.html', 'utf-8')
-    res.send(html)
+    // let html = fs.readFileSync('index.html', 'utf-8')
+    res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8',
+    })
+
+    // Send a simple message in HTML.
+    res.write('<h1>I’m a Node app!</h1>')
+    res.write('<p>And I’m <em>sooooo</em> secure.</p>')
+    res.end()
+    // res.send(html)
 })
 
 // Everything else that's not index 404s
@@ -30,7 +38,7 @@ router.use('*', (req, res) => {
 
 // Create express app and listen on port 4444
 const app = express()
-app.use(express.static('build'))
+// app.use(express.static('dist'))
 app.use(router)
 
 const port = process.env.PORT || 4444
@@ -59,29 +67,7 @@ io.onConnection((channel) => {
         clients[data.id].position = data.position
         clients[data.id].quaternion = data.quaternion
 
-        // console.log(Object.keys(clients).length)
-        channel.broadcast.emit(
-            'move',
-            clients
-            // clients,
-            // Object.keys(clients)
-            //   .filter((clientKey) => clientKey !== channel.webrtcConnection.id)
-            //   .map((client) => {
-            //     const { position, quaternion } = clients[client]
-            //     // const payload = {}
-            //     // payload[client] =
-            //     return { position, quaternion }
-            //   }),
-            // clients.filter((c) => c[data.id] !== channel.webrtcConnection.id),
-        )
-        // client.on('move', ({ id, position, rotation, velocity }) => {
-        //     if (!clients[id]) return
-        //     clients[id].position = position
-        //     clients[id].rotation = rotation
-        //     clients[id].velocity = velocity
-
-        //     _io.sockets.emit('move', clients)
-        //   })
+        channel.broadcast.emit('move', clients)
     })
 
     channel.on('disconnect', (data) => {
